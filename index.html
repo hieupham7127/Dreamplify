@@ -1,0 +1,58 @@
+<html ng-app="IntroDreamplify" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>DREAMPLIFY</title>
+		<meta name="viewport" content="maximum-scale=1"></meta>
+		<link href="css/fontawesome/font-awesome.css" type="text/css" rel="stylesheet"></link>
+		<link href="css/dashboard.css" type="text/css" rel="stylesheet"></link>
+		<link href="css/index.css" type="text/css" rel="stylesheet"></link>
+		<!-- favicon -->
+		<link href="" rel="icon"></link>
+		<link href="" rel="apple-touch-icon"></link>
+		<link href="" rel="apple-touch-icon" sizes="76x76"></link>
+		<link href="" rel="apple-touch-icon" sizes="120x120"></link>
+		<link href="" rel="apple-touch-icon" sizes="152x152"></link>		
+	</head>
+	<!-- Body -->
+    <body ng-controller="Controller as intro" class="">
+        <div class="background" id="background">
+            <!-- Nav Bar -->
+            <div class="container-solid left" id="navbar" style="position:absolute; z-index: 1000;">
+                <div class="coating" style="background:black; z-index:-1"></div>
+                <h1 class="heading" style="">Dreamplify</h1>
+                <a href="signup.html" target="_blank"><input class="button" type="button" value="Register"></input>
+                </a>
+                <input class="button" style="" type="button" id="signin" onclick="signin()" value="Hello, Sign In?">
+            </div>
+
+            <!-- Sign In -->
+            <div class="signin-background" id="signinbox">
+                <form class="signin">
+                    <p class="heading" style="position:relative; font-size: 4em; padding: 40px 0 70px 0; color:#2c90c6">Sign In</p>
+                    <span class="fontawesome-user"></span> <!-- required placeholder is to force users fill all the spaces -->
+                    <input type="text" id="name" onkeydown="pressed(event)" maxlength="20" placeholder="User name" autocomplete="off">
+                    <span class="fontawesome-lock"></span>
+                    <input type="password" id="pass" onkeydown="pressed(event)" maxlength="30" placeholder="Password" autocomplete="off"> 
+                    <input type="submit" value="Submit">
+                </form>
+            </div>
+
+            <!-- Note -->
+            <div id="container">
+                <p>Double click anywhere on dashboard to create a new note</p>
+                <div id="notes">
+                    <div id="toolbar">
+                        <span id="clock"></span>
+                    </div>
+                    <form class="upload" id="attach" method="post" enctype="multipart/form-data" style ="display:none;">
+                        <input type="file" name="file[]" style="color:white;"></input>
+                        <input class="add" type="submit" value="Upload"></input>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <script src="js/dashboard.js" type="text/javascript"></script>
+		<script src="js/jquery.min.js" type="text/javascript"></script>
+		<script src="js/index.js" type="text/javascript"></script>
+	</body>
+</html>

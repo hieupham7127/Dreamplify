@@ -1,0 +1,105 @@
+@font-face {
+    font-family: "Comfortaa";
+    font-weight: 300;
+    src: url(fonts/Comfortaa-Light.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "Comfortaa";
+    font-weight: 400;
+    src: url(fonts/Comfortaa-Regular.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "Comfortaa";
+    font-weight: 700;
+    src: url(fonts/Comfortaa-Bold.ttf) format("truetype");
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Comfortaa";
+    position: relative;
+}
+
+#container #notes {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: 10;
+}
+
+#container p {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    cursor: default;
+    position: absolute;
+    top: 15%;
+    left: 50%;
+    display: inline-block;
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    -moz-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+    color: black;
+    opacity: 0.2;
+    font-size: 1.5em;
+}
+
+#container #notes .note {
+    font-family: sans-serif;
+    text-align: left;
+    color: black;
+    background-color: transparent;
+    /*background: url("../res/note.jpg");
+    background-size: cover;*/
+    box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5);
+    padding: 0px 25px;
+    font-size: 1.3em;
+    overflow: auto;
+}
+
+#container #notes .note .file {
+    position: absolute;
+    right: 45px;
+    padding: 0px;
+    cursor: pointer;
+}
+
+#container #notes .note .close {
+    position: absolute;
+    right: 15px;
+    padding: 0px;
+    cursor: pointer;
+}
+
+#container #notes .note .editor {
+    position: relative;
+    top: 30px;
+    outline: none;
+}
+
+#container #credits {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+}
+
+#toolbar {
+    position: absolute;
+    top: 40%;
+    left: 40%;
+    border-radius: 40px;
+    padding: 10px 10px;
+    opacity: 0.4;
+    /*background-color: rgba(0, 0, 0, 0.5);*/
+    color: rgba(255, 255, 255, 0.75);
+    background-color: transparent;
+    font-size: 5em;
+    user-select: none;
+    cursor: default;
+}
