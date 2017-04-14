@@ -99,6 +99,7 @@ var update_time = function () {
 // ======================
 
 var priority = 0;
+var note_count = 0;
 var Note = function (point, id) {
     var note = this;
 
@@ -124,6 +125,9 @@ var Note = function (point, id) {
         localStorage.setItem("notes", JSON.stringify(notes));
         if (removeElement)
             document.getElementById("notes").removeChild(this.element());
+        note_count--;
+        if (note_count <= 0)             
+            $("p").show();
     };
 
     this.element = function () {
@@ -163,7 +167,10 @@ var Note = function (point, id) {
                 priority++;
                 el.style.zIndex = priority;
             }
-
+            /*el.onkeydown(event) {            	
+            	if (event.keyCode == 27)
+            		note.destroy(true);
+           	}*/
             // check whether a note is clicked
             el.onmousedown = function (event) {
                 console.log("Event: Mouse down, X = ", event.clientX, ", Y = ", event.clientY)
@@ -182,6 +189,19 @@ var Note = function (point, id) {
                 console.log("Event: Mouse up, X = ", event.clientX, ", Y = ", event.clientY);
                 // return to default state, very straightforward, no need to explain
                 el.style.cursor = "default"; 
+            };
+            // after finish typing content for a note
+            el.onkeyup = function () {
+                var content = editor.innerHTML.trim();
+                if (content.length > 0) {
+                    note.relocateContent(editor.innerText);
+                    note.save(content);
+                } 
+                else {
+                    // delete if nothing is typed
+                    el.style.height = DEFAULT_HEIGHT;
+                    note.destroy();
+                }
             };
 
             /*
@@ -254,21 +274,9 @@ var Note = function (point, id) {
                 el.style.height = DEFAULT_HEIGHT + (lines - 1) * 25;
             }
 
-            // after finish typing content for a note
-            el.onkeyup = function () {
-                var content = editor.innerHTML.trim();
-                if (content.length > 0) {
-                    note.relocateContent(editor.innerText);
-                    note.save(content);
-                } 
-                else {
-                    // delete if nothing is typed
-                    el.style.height = DEFAULT_HEIGHT;
-                    note.destroy();
-                }
-            };
             editor.focus();
-
+            note_count++;
+            $("p").hide();
             return el;
         }
     };
@@ -329,7 +337,7 @@ var clearNote = function () {
     }
 };
 
-// whenever a click on dashboard is initiated, create a note
+// whenever a double-click on dashboard is initiated, create a note
 var onCreate = function (event) {
     console.log(event);
     // if event target is not the dashboard, we return
