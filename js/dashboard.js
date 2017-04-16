@@ -21,6 +21,13 @@ var string_generator = function (length) {
     return string;
 };
 
+var uuid_generator = function() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
+
 // =====================
 //      Sign In Box
 // =====================
@@ -101,16 +108,17 @@ var update_time = function () {
 var priority = 0;
 var note_count = 0;
 var instruction = document.getElementById("instruction");
-var Note = function (point, id) {
+var Note = function (point, id, isNeedled) {
     var note = this;
 
     // save note's content to JSON file
     this.save = function (content) {
         var notes = JSON.parse(localStorage.getItem("notes")) || {};
         var element = this.element();
-        // attributes correspond with id: content, location
+        // attributes correspond with id: content, state, location
         notes[note.id] = {
             "content": content,
+            "state": isNeedled,
             "x": (1.0 * parseInt(element.style.left) + DEFAULT_WIDTH / 2) / window.innerWidth,
             "y": (1.0 * parseInt(element.style.top) + DEFAULT_HEIGHT / 2) / window.innerHeight
         };
@@ -206,23 +214,42 @@ var Note = function (point, id) {
             	}
             };
 
+            var btnNeedle = document.createElement("a");
+            btnNeedle.classList = "file";
+            if (!isNeedled)
+                btnNeedle.innerHTML = "o";
+            else btnNeedle.innerHTML = "+";
+            btnNeedle.onclick = function () {
+                console.log("Needle button is clicked");
+                if (!isNeedled) {
+                    isNeedled = true;
+                    btnNeedle.innerHTML = "+"; 
+                }
+                else {
+                    isNeedled = false;
+                    btnNeedle.innerHTML = "o"; 
+                    note.relocateContent();
+                }
+                note.save(editor.innerText);
+            };
+            el.appendChild(btnNeedle);
+
             /*
                 add button File to note
                 attach a picture, img, or video link when the button is clicked                
             */
-
-            var btnFile = document.createElement("a");
+            /*var btnFile = document.createElement("a");
             btnFile.classList = "file";
             // &times is "x" shown on the screen
             btnFile.innerHTML = "+";
             btnFile.onclick = function () {
                 console.log("Attach File button is clicked");
-                /*
+                
                 var attach = document.getElementById("attach");
                 attach.style.display = "initial";
-                */
+                
             };
-            el.appendChild(btnFile);
+            el.appendChild(btnFile);*/
 
             // add button Delete to note
             var btnDel = document.createElement("a");
@@ -257,10 +284,12 @@ var Note = function (point, id) {
                 editor.innerHTML = content;
                 console.log("First line content: ", editor.innerText.split("\n")[0]);    
                 console.log("X = ", el.style.left, ", Y = ", el.style.top);
-                note.relocateContent(editor.innerText);
+                note.relocateContent();
             };
 
-            note.relocateContent = function (content) {                
+            note.relocateContent = function () {
+                if (isNeedled) return;
+                var content = editor.innerText;
                 // Relocate the horizontal length
                 var divs = content.split("\n");
                 var maxHorizontalLength = 21;
@@ -285,9 +314,8 @@ var Note = function (point, id) {
         }
     };
 
-    if (id) {
+    if (id) 
         this.id = id;
-    } 
     // if there is no id, generate one from random string generator
     else {
         this.id = string_generator();
@@ -296,6 +324,9 @@ var Note = function (point, id) {
             this.id = string_generator(); 
         }
     }
+    if (isNeedled) 
+        this.isNeedled = isNeedled;        
+    else this.isNeedled = false;
     console.log("--------------------");
     console.log("A new Note is created with id: ", this.id);
     this.element();
@@ -316,7 +347,7 @@ Note.get = function (id) {
 Note.load = function (id, save) {
     var x = save.x * window.innerWidth;
     var y = save.y * window.innerHeight;
-    var note = new Note({ x: x, y: y }, id);
+    var note = new Note({ x: x, y: y }, id, save.state);
     note.setContent(save.content);
 };
 
